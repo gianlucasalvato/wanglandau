@@ -1,0 +1,46 @@
+.Dd 31/07/15
+.Dt wl 1
+.Os PGTL
+.Sh NAME
+.Nm wl
+.Nd Wang-Landau sampling on a 2D Ising square lattice with nearest neighbours interaction 
+wrapped on a torus.
+.Sh SYNOPSIS
+.Nm
+.Op Fl g Ar double
+.Op Fl s Ar double
+.Op Fl t Ar double
+.Op Fl l Ar unsigned int
+.Op Fl f Ar double
+.Op Fl r Ar unsigned int
+.Sh DESCRIPTION
+.Pp
+All quantities are expressed in intrinsic units.
+.Bl -tag -width -indent
+.It Fl g -mod-factor Ar double
+specifies initial modification factor for the Density of States. Must be a floating-point number larger than 1. The default value is e^1 ~ 2.718 Tip: too large a value will increase significantly the simulation time.
+.It Fl s -shrink-factor Ar double
+specifies the shrinking exponent for the update of the modification factor. Must be a floating-point value between 0 and 1. The default value is 0.5. Tip: a value too close to 1 will increase significantly the simulation time. A value too close to 0 will lead to very large inaccuracies in the resulting Density of States.
+.It Fl t -mod-factor-threshold Ar double
+specifies specifies the threshold value for the modification factor. Must be a floating-point value between 1 and the modification factor (see -g). The default value is 1 + 1e-8.
+.It Fl l -edge-length Ar unsigned int
+specifies the length of a single edge of the square simulation box. Values smaller than 2 are not accepted (and do not make sense anyway). Values larger than the implementation-defined maximum (can be modified in the CMakeLists.txt configuration file before compiling from source). The default value is 16.
+.It Fl f -flatness-threshold Ar double
+specifies a fraction of the average value of the histogram of visited energies to be used as a threshold for the flatness condition. The default value is 0.9. If ANY channel contains a value which is lower than the threshold the histogram will be considered NOT flat. Tip: too high a value may increase significantly the simulation time while too low a value will lead to great loss of accuracy in the resulting Density of States.
+.It Fl r -seed Ar unsigned int
+specifies seed to be fed to the pseudo-random number generator. The default value is 0, which makes the program use the default built-in seed of the pseudo-random number generator. Tip: the prng can be modified in the CMakeLists.txt configuration file before compiling from source.
+.El
+.Pp
+.Sh FILES
+.Bl -tag -width -compact
+.It Pa input.txt
+The input values and other sensible data is stored in this file for reproducibility and analysis.
+.It Pa dos_formatted.txt
+The output of the program is stored in this file as a formatted list of values. The format is
+	i	e	g	log(g)
+where 'i' is the C-style index of the array that used to contain the values, 'e' is the energy value associated with such index, 'g' is the value of the Density of States at the corresponding energy and 'log(g)' is its natural logarithm.
+.It Pa log.txt
+Contains diagnostic information on the simulation, such as the total number of performed Monte Carlo steps and their acceptance ratio.
+.El
+\".Sh SEE ALSO 
+\".Xr a 1

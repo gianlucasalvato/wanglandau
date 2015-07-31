@@ -129,7 +129,7 @@ The source code can be compiled using the {\bf cmake} utility but it is recommen
 Some compile-time configuring options, such as the dimensionality of the system and the pseudo-random number generator (PRNG) to be used, can be modified in the file \verb|CMakeLists.txt| prior to the execution of the utility.
 The script will output the executable (named \verb|wl|) which can then be run.
 
-The program accepts the following options:
+The program accepts the following options:\footnote{One can also see the manpage by running \verb|man ./wl.1| from the source root directory.}
 \begin{center}\begin{tabular}{cllcc}
 \toprule
 Option	&	Long form				&	Meaning							& Data type			& Default		\\
@@ -152,7 +152,7 @@ Thread model: posix
 
 The code was also successfully compiled under \verb|GNU Linux 3.16.0| (Debian and Ubuntu)  and \verb|FreeBSD 10.1| using \verb|clang| from the default repositories.
 
-{\underline Notice:} \verb|GCC 4.8| currently only offers limited support for the \verb|C++11| standard and refuses to compile the code due to the use of aliases
+{\underline Notice:} \verb|GCC 4.8| currently only offers limited support for the \verb|C++11| standard and refuses to compile the code due to the use of aliases.
 
 \subsection{Output files}
 The program outputs three ``.txt'' files:
@@ -179,8 +179,12 @@ A bash script (named \verb|collect.sh|) is provided along with the source code i
 Since the 2D Ising model is exactly solvable, the exact results (see \cite{bib:exact}) were here used in order to compute the actual relative errors on the dataset.
 
 The analysis of the results has been delegated to another software, Wolfram Mathematica being an obvious candidate. The notebook that was used for this analysis is provided along with the source code and the collection script.
-The notebook provides simple functions to load the generated data and compare it with the exact result thereby coded.
+The notebook provides simple functions to load the generated data and compare it with the exact result.
 
+The relative errors with respect to the exact solution are calculated for any function $F(T)$ as
+\[
+	\varepsilon[F(T)] = \left\lvert\frac{F(T) - F_{exact}(t)}{F_{exact}(T)}\right\rvert
+\]
 
 
 \subsection{Code structure}
@@ -198,6 +202,7 @@ The source code \footnote{The source code is available and freely downloadable o
 	This class is meant to provide all functions and properties which are not intrinsic either to the system itself or to its state but are only relevant to the implementation of the integration mechanics.
 	The {\verb Parameters } nested type contains all the simulation parameters that are used by the algorithm during execution. The namespace \verb|names::Algorithm| is the container for all algorithm names.
 	\item[-] Other utility classes such as \verb|HypercubicGrid| included in the \verb|utils| namespace are meant to provide the representation of some underlying structure of the system under consideration.\footnote{It's worth noting that some properties (such as the dimensionality of the system, the maximum number of allowed spin sites and the pseudo-random number generator [PRNG]) are hard-coded in the program but can be easily modified by changing the corresponding definitions in the ``CMakeLists.txt'' file before compiling with the {\bf cmake } utility or via the bash script ``build.sh''. This choice was made thinking that the advantages of being able to compute many dimensional-dependent quantities at compile time greatly overcome the disadvantage of having to rebuild the software from source; moreover, one can easily build one executable for each needed dimensionality, which not often does anyway exceed 3.}
+	\item[-] The ``\verb|options.h|'' source file only contains the code that is needed to parse command line arguments, in short or long format, and to perform some safety checks on the given values.
 \end{itemize}
 
 The source code follows the {\bf tag dispatching pattern} in order to concretize the actual objects to be constructed. Due to the limited time available for the development, there is certainly room for much improvement; furthermore, due to low relevance for the present work, all unneeded classes have been stripped out from the library source tree.
@@ -206,7 +211,7 @@ The source code follows the {\bf tag dispatching pattern} in order to concretize
 
 The two tags {\verb HypercubicIsing } and {\verb NearestNeighboursInteraction } are fed to the {\verb System } and {\verb State } templates respectively and the resulting {\verb System } class is fed to the {\verb Algorithm } template class in order to construct the full object.
 
-The details of the algorithm can be found in the paper by Landau, Tsai and Exler \cite{bib:wang_landau} as only those implementation-dependent parts are explained below in order for the reader to understand how to use the code.
+The details of the algorithm can be found in the paper by Landau, Tsai and Exler \cite{bib:wang_landau} as only those implementation-dependent parts are explained below in order for the reader to understand how to use the code. All the relevant parts of the algorithm are coded in the \verb|move()| instance function of the \verb|Algorithm| class.
 
 As a first step it is strongly advised to define aliases to the template specializations that will be used and a logging macro (named {\verb mesg }). The terms {\verb System }, {\verb State } and {\verb Algorithm } will here be used to address such specializations.
 
@@ -243,17 +248,11 @@ The normalization constant is in all cases chosen to be such that $g(\epsilon_{g
 The mentioned paper shows the results of the Wang-Landau algorithm (using code wrote by the authors themselves\footnote{The sample code can be found at the following address: \url{http://ftp.aip.org/epaps//am_j_phys/E-AJPIAS-72-006406/}}) for the case $L=16$, $t=0.8$ and with the same other parameters as described above and shows the error by comparison with the exact result by Ferdinand and Fisher\cite{bib:exact}. The same approach will here be used\footnote{Since this paper cannot be easily be obtained, the exact result is reported in \appname \ref{app:exact_finite}}.
 
 
-
 \subsection{Main test results}
 
 The average overall computation time for this test has been little less than $2~m$ per simulation. All results were consistent and a quick statistical analysis showed very low standard deviations). This analysis is not presented here since we are, for the present, dealing with the exact results instead.
 
-The simulation results, along with the relative errors with respect to the exact solutions are plotted from \figname \ref{fig:free16} to \figname \ref{fig:cv16_errlog}. The errors are calculated for any function $F(T)$ as
-\[
-	\varepsilon[F(T)] = \left\lvert\frac{F(T) - F_{exact}(t)}{F_{exact}(T)}\right\rvert
-\]
-
-We use the symbols $f(T)$, $u(T)$, $s(T)$ to represent the free energy, the internal energy and the entropy {\em per particle}, respectively. The symbol $c_v(T)$ is obviously referred to the specific heat.
+The simulation results, along with the relative errors with respect to the exact solutions are plotted from \figname \ref{fig:free16} to \figname \ref{fig:cv16_errlog}. The symbols $f(T)$, $u(T)$, $s(T)$ represent the free energy, the internal energy and the entropy {\em per particle}, respectively. The symbol $c_v(T)$ is obviously referred to the specific heat.\footnote{All specified values are expressed in intrinsic units.}
 
 As can easily be seen there is no way to distinguish by eye sight between the computed and exact results in the specified range $T\in[0,8]$ (for the reason which I felt no need to display any legend). Approximate values of the (absolute value of the) maximum relative errors are given in the \tabname \ref{tab:errors16}.
 
@@ -281,7 +280,6 @@ $s(T)$	&	$10^{-2}$			&	$c_v(T)$	&	$3 \times 10^{-2}$ ($T > 1/4$)		\\
 
 Apart from a negligibly small region very close to $T=0$ all errors are reasonably limited. This in not however true for the specific heat, as below $T \approx 1/4$ the relative error becomes as large as $1$.
 
-\newpage
 \begin{multicols}{2}
 	\pict{entropy16}{Computed and exact entropy of the $16 \times 16$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
 	\pict{entropy16_errlog}{Base 10 logarithm of $\varepsilon[s(T)]$ for $L=16$.}
@@ -290,7 +288,7 @@ Apart from a negligibly small region very close to $T=0$ all errors are reasonab
 	\pict{cv16_errlog}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=16$.}
 \end{multicols}
 
-The overall results of this test resemble very closely those obtained by Wang, Tsai and Exler in their paper. The critical temperature (or, better, the maximum of the specific heat) for this case is found at $k_bT_c \approx 2.43$
+The overall results of this test resemble very closely those obtained by Wang, Tsai and Exler in their paper. The critical temperature (or, better, the maximum of the specific heat) for this case is found at $k_bT_c \approx 2.324 \pm 0.001$\footnote{Since the maximization function (\verb|FindMaximum| in Mathematica) fails, this result has been computed by tabulating the values of $c_v(T)$ in the interval $T\in[2,3]$ with a bin $\Delta T = 10^{-3}$ and the maximum value in the table has been taken to be the computed one. More accurate results can be computed but require very large computation time.}
 
 \subsection{Other tests: increasing the system size}
 
@@ -384,7 +382,7 @@ The peak in the specific heat has however become sharper still and is slowly app
 	\pict{cv64}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=64$.}
 \end{multicols}
 
-From \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the peak in the specific heat at the ``critical temperature'' becomes sharper and sharper as the size of the system increases, as expected. The value of the critical temperature (or, again, the maximum of the specific heat) is found to be $k_bT_c \approx 2.34$ for $L=32$ and $k_bT_c \approx 2.28$ for $L=64$.
+From \figname \ref{fig:cv16}, \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the peak in the specific heat at the ``critical temperature'' becomes sharper and sharper as the size of the system increases, as expected. The value of the critical temperature (or, again, the maximum of the specific heat) is found to be $k_bT_c \approx 2.294 \pm 0.001$ for $L=32$ and $k_bT_c \approx 2.283 \pm 0.001$ for $L=64$.
 
 \section{Discussion}
 
@@ -392,13 +390,12 @@ The overall results of all simulations show that the Wang-Landau method is indee
 \[
 	c_v(T_c) \approx c_v^{(0)}(T_c)\log(L)
 \]
-for low values of $L$ and with $c_v^{(0)} \approx 5.89 \times 10^{-1}$ as can be seen from \figname \ref{fig:cv_tc}.
+for low values of $L$ and with $c_v^{(0)} \approx 0.59 \pm 0.01$ as can be seen from \figname \ref{fig:cv_tc}. The value $c_v^{(0)}$ was obtained by performing a \verb|NonlinearModelFit| on the dataset with the test function $C\log{(L)}$ with the free variable $L$ and the unique fit parameter $C$.
 
 \begin{multicols}{2}
 	\pict{cv_tc}{Behaviour of the specific heat at the critical temperature as a function of $L$. The points denote computed values while the solid line represents the function $c_v^{(0)}\log{(L)}$}
 	\pict{tc}{Behaviour of the critical temperature as a function of $L$. $T_c(L)$ shows a monotonic decreasing behaviour with a non-zero curvature that lead to the asymptotic value $T_c(\inf)$ predicted by the infinite-size result.}
 \end{multicols}
-
 
 \appendix
 
