@@ -7,7 +7,7 @@ set(MAX_SITES 		1073741824)
 set(PRNG 			std::mt19937_64)
 
 set (wl_VERSION_MAJOR 0)
-set (wl_VERSION_MINOR 4)
+set (wl_VERSION_MINOR 8)
 
 set (CMAKE_CXX_FLAGS				"-std=c++11 -Ofast")
 set (CMAKE_CXX_FLAGS_RELEASE		"-Ofast")

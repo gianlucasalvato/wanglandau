@@ -388,11 +388,17 @@ From \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the pea
 
 \section{Discussion}
 
-The overall results of all simulations show that the Wang-Landau method is indeed a good approach to the study of the 2D Ising model. The temperature at which the maximum value of the specific heat occurs is a monotonic decreasing function of the system size as can see from \figname \ref{fig:critical} and $C = \max_t[c_v(T)]$ obeys the relation
+The overall results of all simulations show that the Wang-Landau method is indeed a good approach to the study of the 2D Ising model. The temperature at which the maximum value of the specific heat occurs is a monotonic decreasing function of the system size as can see from \figname \ref{fig:tc} and $c_v(T_C) = \max_T[c_v(T)]$ only obeys the relation
 \[
 	c_v(T_c) \approx c_v^{(0)}(T_c)\log(L)
 \]
-as can be seen from \figname \ref{fig:spec_heat}.
+for low values of $L$ and with $c_v^{(0)} \approx 5.89 \times 10^{-1}$ as can be seen from \figname \ref{fig:cv_tc}.
+
+\begin{multicols}{2}
+	\pict{cv_tc}{Behaviour of the specific heat at the critical temperature as a function of $L$. The points denote computed values while the solid line represents the function $c_v^{(0)}\log{(L)}$}
+	\pict{tc}{Behaviour of the critical temperature as a function of $L$. $T_c(L)$ shows a monotonic decreasing behaviour with a non-zero curvature that lead to the asymptotic value $T_c(\inf)$ predicted by the infinite-size result.}
+\end{multicols}
+
 
 \appendix
 
