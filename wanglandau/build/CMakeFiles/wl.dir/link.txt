@@ -1,0 +1,1 @@
+/usr/bin/clang++   -std=c++11 -Ofast -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/wl.dir/wl.cpp.o  -o wl  

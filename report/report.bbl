@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{bib:wang_landau}
+M.~Exler D.~P.~Landau, Shan-Ho~Tsai.
+\newblock A new approach to monte carlo simulations in statistical physics:
+  Wang-landau sampling.
+\newblock {\em Am. J. Phys}, 72, 2004.
+
+\bibitem{bib:lect_notes}
+Maria Peressi.
+\newblock The ising model in the canonical ensemble.
+\newblock 2014.
+
+\bibitem{bib:problem}
+J.~Tobochnik Gould.
+\newblock Density of states of the 2d ising model, Jun 2010.
+
+\bibitem{bib:exact}
+Micheal E.~Fisher Arthur R.~Ferdinand.
+\newblock Bounded and inhomogeneous ising models. i. specific heat anomaly of
+  the finite lattice.
+\newblock {\em Physical Review}, 185(2):832--846, Sep 1969.
+
+\bibitem{bib:exact2}
+Zheng~Dai Xin-Zeng~Wu, Di~Li.
+\newblock Math 505 project: Ising model - phase transition, May 2014.
+
+\end{thebibliography}

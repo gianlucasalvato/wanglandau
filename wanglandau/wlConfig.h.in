@@ -1,0 +1,7 @@
+// Configured options
+#define wl_VERSION_MAJOR @wl_VERSION_MAJOR@
+#define wl_VERSION_MINOR @wl_VERSION_MINOR@
+
+#define DIMENSIONALITY @DIMENSIONALITY@
+#define MAX_SITES @MAX_SITES@
+#define PRNG @PRNG@

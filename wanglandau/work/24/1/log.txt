@@ -1,0 +1,6 @@
+-- Wang-Landau Sampling --
+
+monte_carlo_steps: 1434240000
+monte_carlo_sweeps: 27
+accepted_steps: 594202069
+acceptance_ratio: 0.414298
