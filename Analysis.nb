@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    119300,       2449]
-NotebookOptionsPosition[    117528,       2384]
-NotebookOutlinePosition[    117883,       2400]
-CellTagsIndexPosition[    117840,       2397]
+NotebookDataLength[    119317,       2449]
+NotebookOptionsPosition[    117545,       2384]
+NotebookOutlinePosition[    117900,       2400]
+CellTagsIndexPosition[    117857,       2397]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2255,7 +2255,7 @@ Cell[BoxData[
               RowBox[{"cv", "[", 
                RowBox[{"t", ",", "n"}], "]"}]}]}], "}"}], ",", 
            RowBox[{"{", 
-            RowBox[{"t", ",", "2", ",", "3", ",", "0.0005"}], "}"}]}], 
+            RowBox[{"t", ",", "2", ",", "2.5", ",", "0.001"}], "}"}]}], 
           "]"}]}], ";", "\[IndentingNewLine]", 
         RowBox[{"Block", "[", 
          RowBox[{
@@ -2279,12 +2279,12 @@ Cell[BoxData[
          "]"}]}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "]"}], 
      "&"}], "/@", "list"}]}], "\[IndentingNewLine]"}]], "Input",
  CellChangeTimes->CompressedData["
-1:eJxTTMoPSmViYGAQBmIQvee6H/dqndeOuhVvJEF0tvRMJRDN9OQ9mFYIdgwA
+1:eJxTTMoPSmViYGAQAWIQvee6H/dqndeOuhVvJEF0tvRMJRDN9OQ9mFYIdgwA
 0c8Y2wJBtM5eziiw/GMXMM3j15AAolUYl4DphGN8aSB690dVMO30y7wERJ9/
 ztMPoj/8ubcdRKfte7ILRN+rOLsPRNt/bD4GollCIs6A6PknxR6AaLMp1S9A
 dJd39FsQPYXt4TcQ/erGjT8gekInO9MaIO2xYRMHiJ6nFiAKop8e1ZAA0WJt
 abIg+tD6bjkQvY4hwwlEy9174gzWZ+8bBqJ/POSJANHH0rsM9gBpvysxJiB6
-wZ89LSBabodgF4gGAAlRlvw=
+wZ89LSBabodgF4ieZl8xYT+QjmiSnASiAbt1no0=
   "]],
 
 Cell[CellGroupData[{
@@ -2438,10 +2438,10 @@ Cell[CellGroupData[{
 Cell[67829, 1423, 958, 25, 51, "Input"],
 Cell[68790, 1450, 39695, 702, 224, "Output"]
 }, Open  ]],
-Cell[108500, 2155, 5259, 132, 451, "Input"],
+Cell[108500, 2155, 5276, 132, 451, "Input"],
 Cell[CellGroupData[{
-Cell[113784, 2291, 2426, 60, 63, "Input"],
-Cell[116213, 2353, 1287, 27, 244, "Output"]
+Cell[113801, 2291, 2426, 60, 63, "Input"],
+Cell[116230, 2353, 1287, 27, 244, "Output"]
 }, Open  ]]
 }, Open  ]]
 }

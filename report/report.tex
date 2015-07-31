@@ -92,9 +92,9 @@ The aim of this work is to reproduce the results of Wang, Tsai and Exler \cite{b
 Wang-Landau sampling, Ising2D, Monte Carlo, Computed Density of States
 \end{keywords}
 
-\section*{Introduction}
+\section{Introduction}
 
-\subsection*{The algorithm}
+\subsection{The algorithm}
 
 The Wang-Landau sampling is a method of the Monte Carlo class (and of the Metropolis subclass) which takes a completely different approach with respect to the traditional Monte Carlo algorithm; it does not focus on the achievement of an equilibrium distribution by means of energy minimization nor does it focus on the immediate building of a probability distribution of the states of a system.
 Instead, it focuses on an equal exploration of all possible energies of a given system model and builds the corresponding Density of States in energy $g(\epsilon)$ during the process.
@@ -109,11 +109,11 @@ The aim of this work is to reproduce the results presented in a paper dated $200
 
 A further goal is to verify the following relation as presented on the webpage of Gould Tobochnik\cite{bib:problem}\footnote{The webpage can be found at the following address: \url{http://stp.clarku.edu/simulations/}.}
 \[
-	c_v \approx c_v^(0)\log{(L)}
+	c_v \approx c_v^{(0)}\log{(L)}
 \]
-where $c_v$ denotes the specific heat of the system, $c_v^(0)$ denotes its base value and $L$ denotes the linear length of a single edge in the square 2-dimensional Ising lattice.
+where $c_v$ denotes the specific heat of the system, $c_v^{(0)}$ denotes its base value and $L$ denotes the linear length of a single edge in the square 2-dimensional Ising lattice.
 
-\section*{Program code}
+\section{Program code}
 
 The algorithm for Wang-Landau sampling is clearly and comprehensively described in the paper by Landau, Tsai and Exler\cite{bib:wang_landau}, so only the most notable features are reported here:
 \begin{itemize}
@@ -123,23 +123,23 @@ The algorithm for Wang-Landau sampling is clearly and comprehensively described 
 \end{itemize}
 
 
-\subsection*{Compiling and running the code}
+\subsection{Compiling and running the code}
 
 The source code can be compiled using the {\bf cmake} utility but it is recommended to compile it using the provided bash script \verb|build.sh| in order to avoid working directory pollution.
 Some compile-time configuring options, such as the dimensionality of the system and the pseudo-random number generator (PRNG) to be used, can be modified in the file \verb|CMakeLists.txt| prior to the execution of the utility.
-The script will output the executable (named \verb|wl|) which can the be run.
+The script will output the executable (named \verb|wl|) which can then be run.
 
 The program accepts the following options:
-\begin{center}\begin{tabular}{cllc}
+\begin{center}\begin{tabular}{cllcc}
 \toprule
-Option	&	Long form				&	Meaning							& Data type		\\
+Option	&	Long form				&	Meaning							& Data type			& Default		\\
 \midrule
-g 		&	mod-factor				&	Initial modification factor		& double		\\
-s 		&	shrink-factor			&	Shrinking exponent				& double		\\
-t 		&	mod-factor-threshold	&	Modification factor threshold	& double		\\
-f 		&	flatness-treshold		&	Histogram flatness threshold	& double 		\\
-l 		&	edge-length				&	Length of a square edge			& unsigned int	\\
-r 		&	seed					&	PRNG initial seed				& unsigned long	\\
+g 		&	mod-factor				&	Initial modification factor		& double			& $e^1$			\\
+s 		&	shrink-factor			&	Shrinking exponent				& double			& $1/2$			\\
+t 		&	mod-factor-threshold	&	Modification factor threshold	& double			& $1 + 10^{-8}$	\\
+f 		&	flatness-treshold		&	Histogram flatness threshold	& double 			& $0.9$			\\
+l 		&	edge-length				&	Length of a square edge			& unsigned int		& $16$			\\
+r 		&	seed					&	PRNG initial seed				& unsigned long		& $0$\footnote{If $0$ is fed to this option, the program will choose the default built-in seed of the PRNG}			\\
 \bottomrule
 \end{tabular}\end{center}
 
@@ -154,7 +154,7 @@ The code was also successfully compiled under \verb|GNU Linux 3.16.0| (Debian an
 
 {\underline Notice:} \verb|GCC 4.8| currently only offers limited support for the \verb|C++11| standard and refuses to compile the code due to the use of aliases
 
-\subsection*{Output files}
+\subsection{Output files}
 The program outputs three ``.txt'' files:
 \begin{itemize}
 	\item[-] \verb|input.txt|: contains all information fed to the program along with some other initialization value such as the the seed used by the PRNG. This file is useful both for reproducibility and for parsing by analysis software such as Wolfram Mathematica.
@@ -172,39 +172,37 @@ The program outputs three ``.txt'' files:
 	\end{tabular}\end{center}
 \end{itemize}
 
-\subsection*{Data analysis}
+\subsection{Data analysis}
 
-A bash script (named \verb|collect.sh|) is provided along with the source code in order to run multiple simulations (with different or equal parameters) in independent environments, thus allowing one to collect significant statistics on the results.
+A bash script (named \verb|collect.sh|) is provided along with the source code in order to run multiple simulations (with different or equal parameters) in independent environments, thus enabling one to collect significant statistics on the results.
 
 Since the 2D Ising model is exactly solvable, the exact results (see \cite{bib:exact}) were here used in order to compute the actual relative errors on the dataset.
 
-The analysis of the results has been delegated to another software, Wolfram Mathematica being the obvious candidate. The notebook that was used for this analysis is provided along with the source code and the collection script.
+The analysis of the results has been delegated to another software, Wolfram Mathematica being an obvious candidate. The notebook that was used for this analysis is provided along with the source code and the collection script.
 The notebook provides simple functions to load the generated data and compare it with the exact result thereby coded.
 
 
 
-\subsection*{Code structure}
+\subsection{Code structure}
 
 \underline{Note:} This and the following section contain some technical information about the program and can be quietly skipped. It is only advised to read the following if the reader has the intention of reusing/modifying the code for his/her own purpose.
 
-The source code \footnote{The source code is available and freely downloadable on the GitHub platform at the following address: \url{}} is organized as follows:
+The source code \footnote{The source code is available and freely downloadable on the GitHub platform at the following address: \url{https://github.com/gianlucasalvato/wanglandau.git}} robbed a library (of my own writing) of some useful concepts and programming patterns and is organized as follows:
 \begin{itemize}
-	\item[-] The \verb|System| template class accepts one empty class template argument and is meant to represent the basic, state-independent properties of the system under consideration, such as the dimensionality and the underlying structure of the lattice representation. The template argument represents a name for the system under consideration.
-	\footnote{Such objects are commonly referred to as ``tags'' as they provide no data and no instance functions and are actually compiled out of the program at an early stage; they are only used to name a specific template specialization.}
+	\item[-] The \verb|System| template class accepts one dummy class template argument and is meant to represent the basic, state-independent properties of the system under consideration, such as the dimensionality and the underlying structure of the lattice representation. The template argument represents a name for the system under consideration.\footnote{Such objects are commonly referred to as ``tags'' as they provide no data and no instance functions and are actually compiled out of the program at an early stage; they are only used to name a specific template specialization.}
 	The namespace \verb|names::System| is the place in which all the relevant tags should be placed.
 	\item[-] The \verb|State| template class accepts a \verb|System| class and a \verb|tag| class as template arguments (again, only a dummy class for name resolution).
 	It is meant to provide those properties of the system which are not intrinsic properties of the model but rather depend on the current state of the system itself.
-	This includes a \verb|dof| (degrees of freedom) variable along with an {\verb energy() } function and some utility functions which act on on the {\verb dof }s.
+	This includes a \verb|dof| (degrees of freedom) variable along with an \verb|energy()| function and some utility functions which act on on (or extract information from) the \verb|dof|s.
 	\item[-] The \verb|Algorithm| template class accepts a \verb|System| class and a {\verb Strategy } tag as template arguments and instantiates the appropriate \verb|State| object for subsequent manipulation.
 	This class is meant to provide all functions and properties which are not intrinsic either to the system itself or to its state but are only relevant to the implementation of the integration mechanics.
 	The {\verb Parameters } nested type contains all the simulation parameters that are used by the algorithm during execution. The namespace \verb|names::Algorithm| is the container for all algorithm names.
-	\item[-] Other utility classes such as \verb|HypercubicGrid| included in the \verb|utils| namespace are meant to provide the representation of some underlying structure of the system under consideration.
-	\footnote{It's worth noting that some properties (such as the dimensionality of the system, the maximum number of allowed spin sites and the pseudo-random number generator [PRNG]) are hard-coded in the program but can be easily modified by changing the corresponding definitions in the ``CMakeLists.txt'' file before compiling with the {\bf cmake } utility or via the bash script ``build.sh''. This choice was made thinking that the advantages of being able to compute many dimensional-dependent quantities at compile time greatly overcome the disadvantage of having to rebuild the software from source; moreover, one can easily build one executable for each needed dimensionality, which not often does anyway exceed 3.}
+	\item[-] Other utility classes such as \verb|HypercubicGrid| included in the \verb|utils| namespace are meant to provide the representation of some underlying structure of the system under consideration.\footnote{It's worth noting that some properties (such as the dimensionality of the system, the maximum number of allowed spin sites and the pseudo-random number generator [PRNG]) are hard-coded in the program but can be easily modified by changing the corresponding definitions in the ``CMakeLists.txt'' file before compiling with the {\bf cmake } utility or via the bash script ``build.sh''. This choice was made thinking that the advantages of being able to compute many dimensional-dependent quantities at compile time greatly overcome the disadvantage of having to rebuild the software from source; moreover, one can easily build one executable for each needed dimensionality, which not often does anyway exceed 3.}
 \end{itemize}
 
-The source code follows the {\bf tag dispatching pattern} in order to concretize the actual objects to be constructed. Due to the limited time available for the development, there is certainly room for much improvement; furthermore, due to low relevance for the present work, all unneeded classes have been stripped out from the given source tree.
+The source code follows the {\bf tag dispatching pattern} in order to concretize the actual objects to be constructed. Due to the limited time available for the development, there is certainly room for much improvement; furthermore, due to low relevance for the present work, all unneeded classes have been stripped out from the library source tree.
 
-\subsection*{Implementation}
+\subsection{Implementation}
 
 The two tags {\verb HypercubicIsing } and {\verb NearestNeighboursInteraction } are fed to the {\verb System } and {\verb State } templates respectively and the resulting {\verb System } class is fed to the {\verb Algorithm } template class in order to construct the full object.
 
@@ -214,11 +212,11 @@ As a first step it is strongly advised to define aliases to the template special
 
 The user has to instantiate an object of the {\verb System } class, one of the {\verb Algorithm::Parameters } class and a PRNG object to feed the {\verb Algorithm } constructor.
 
-Nothing more is actually needed and the user can begin the evolution straight away by calling the {\verb step(size_t) } function which accepts the number of steps to be performed as an argument. Due to the nature of the Wang-Landau algorithm it is more convenient to call the {\verb sweep(size_t) } function which repeatedly calls {\verb steps(size_t) } and updates the DoS modification factor when the flatness criterium is satisfied. 
+Nothing more is actually needed and the user can begin the evolution straight away by calling the \verb|step(size_t)| member function of the \verb|Algorithm| instance, which accepts as the only argument the number of steps to be performed. Due to the nature of the Wang-Landau algorithm it is more convenient to call the {\verb sweep(size_t) } function which repeatedly calls {\verb steps(size_t) } and updates the DoS modification factor whenever the flatness criterium is satisfied. 
 
-\section*{Tests}
+\section{Tests}
 
-After carefully testing each component of the program a very specific set of convergence tests has been chosen. The only differences between any two tests are the size of the system $N=L^2$ (where $L$ is the length of a single edge of the square simulation box) and the flatness threshold $t$ for the histogram of visited energies.
+After carefully testing each component of the program a very specific set of tests has been chosen. The only differences between any two tests are the size of the system $N=L^2$ (where $L$ is the length of a single edge of the square simulation box) and the flatness threshold $t$ for the histogram of visited energies.
 
 The following properties are common to all tests:
 \begin{itemize}
@@ -230,34 +228,36 @@ The following properties are common to all tests:
 \end{itemize}
 
 The flatness threshold\footnote{The flatness threshold is a fractional value in the interval $]0,1[$ and represents the fraction of the {\em average} value $\tilde h$ of the histogram (which we know {\em a priori} to be equal to the number of performed steps divided by the number of channels in the histogram) such that if {\bf any} histogram channel $i$ yields a value $h[i] < \tilde h$ the histogram is considered NOT flat.}
-for the histogram of visited energies has been carefully tuned for each simulation: for small sizes of the system ($L={6,8,10,12,16}$) the values $t=0.8$, $t=0.9$, $t=0.95$ has been tested to yield little differences in both the simulation time and the accuracy of the computed DoS.
+for the histogram of visited energies has been carefully tuned for each simulation: for small sizes of the system ($L=\{2,...,16\}$) the values $t=0.8$, $t=0.9$, $t=0.95$ has been tested to yield little differences in both the simulation time and the accuracy of the computed DoS.
 
-For bigger systems (such as $L=32$ and $L=64$) the value $t=0.8$ has been chosen as higher values would considerably increase the simulation time without noticeably improve the accuracy of the final results. The case $L=64$ presented some problems as the normalized density of states can quickly overflows the capacity of a \verb|double| variable; we have in fact $\max_\epsilon log(g(\epsilon)) \approx 2835$ and $e^{2835} \approx 10^{1231}$ is clearly not representable as a single or double precision standard floating point values, which should be able to store the value.
+For bigger systems (such as $L=32$ and $L=64$) the value $t=0.8$ has been chosen as higher values would considerably increase the simulation time without noticeably improve the accuracy of the final results. The case $L=64$ presented some problems as the normalized density of states can quickly overflow the capacity of a \verb|double| variable; we have in fact $\max_\epsilon log(g(0)) \approx 2835$ so that $g(0) \approx e^{2835} \approx 10^{1231}$ is clearly not representable as a single or double precision standard floating point value.
 
-For this reason, all simulations were run with a quadruple precision \verb|long double| data type instead. On my machine each \verb|long double| takes $16$ bytes of memory space. Furthermore, it is possible to always work with the logarithm of the Density of States in order to avoid overflows (at the cost of losing some precision).
+For this reason, all simulations were run with a quadruple precision \verb|long double| data type instead, which should be able to store the value. On my machine each \verb|long double| takes $16$ bytes of memory space. Furthermore, it is possible to always work with the logarithm of the Density of States in order to avoid overflows (at the cost of losing some precision). This strategy has been chosen for $L=64$.
 
-For bigger systems still the value has been kept at $t=0.8$ but the simulation time results exceedingly increased. Since at the time of writing I'm still waiting for the cases $L=128$ and $L=256$ to terminate their parallel execution\footnote{This is not surprising since we can expect the simulation time to grow {\em at least} as $L^2$.}, I cannot speak about the results of such cases.
+For bigger systems still the value has been kept at $t=0.8$ but the simulation time results exceedingly increased. Since at the time of writing I'm still waiting for the cases $L=128$ and $L=256$ to terminate their parallel execution\footnote{This is not surprising since we can expect the simulation time to grow {\em at least} as $L^2$.}, I cannot speak about the properties of those systems.
 
 The normalization constant is in all cases chosen to be such that $g(\epsilon_{ground~state}) = 2$.
 
-\subsection*{Main test: reproducing Wang, Tsai \& Exler results}
+\subsection{Main test: reproducing Wang, Tsai \& Exler results}
 
-The mentioned paper shows the results of the Wang-Landau algorithm (using code wrote by the authors themselves\footnote{The sample code can be found at the following address: \url{http://ftp.aip.org/epaps//am_j_phys/E-AJPIAS-72-006406/}}) for the case $L=16$, $t=0.8$ and with the same other parameters as described above and shows the error by comparison with the exact result by Ferdinand and Fisher\cite{bib:exact}. The same approach will here be used.\footnote{Since this paper cannot be easily be obtained, the exact result is reported in \appname \ref{app:exact_result}}.
+The mentioned paper shows the results of the Wang-Landau algorithm (using code wrote by the authors themselves\footnote{The sample code can be found at the following address: \url{http://ftp.aip.org/epaps//am_j_phys/E-AJPIAS-72-006406/}}) for the case $L=16$, $t=0.8$ and with the same other parameters as described above and shows the error by comparison with the exact result by Ferdinand and Fisher\cite{bib:exact}. The same approach will here be used\footnote{Since this paper cannot be easily be obtained, the exact result is reported in \appname \ref{app:exact_finite}}.
 
 
 
-\subsection*{Main test results}
+\subsection{Main test results}
 
-The average overall computation time for this test has been about $1:48~s$ per simulation. All results were consistent and a quick statistical analysis showed very standard deviations (as low as $10^{-11}$).
+The average overall computation time for this test has been little less than $2~m$ per simulation. All results were consistent and a quick statistical analysis showed very low standard deviations). This analysis is not presented here since we are, for the present, dealing with the exact results instead.
 
 The simulation results, along with the relative errors with respect to the exact solutions are plotted from \figname \ref{fig:free16} to \figname \ref{fig:cv16_errlog}. The errors are calculated for any function $F(T)$ as
 \[
 	\varepsilon[F(T)] = \left\lvert\frac{F(T) - F_{exact}(t)}{F_{exact}(T)}\right\rvert
 \]
 
-As can easily be seen there is no way to distinguish by eye sight between the two curves. Approximate values of the (absolute value of the) maximum relative errors are given in the \tabname \ref{tab:errors16}.
+We use the symbols $f(T)$, $u(T)$, $s(T)$ to represent the free energy, the internal energy and the entropy {\em per particle}, respectively. The symbol $c_v(T)$ is obviously referred to the specific heat.
 
-\captionof{table}{Approximate values of the maximum absolute value of the relative errors for $L=16$}
+As can easily be seen there is no way to distinguish by eye sight between the computed and exact results in the specified range $T\in[0,8]$ (for the reason which I felt no need to display any legend). Approximate values of the (absolute value of the) maximum relative errors are given in the \tabname \ref{tab:errors16}.
+
+\captionof{table}{Approximate values of $\varepsilon[F(T)]$ for $L=16$}
 \begin{center}
 \label{tab:errors16}
 \begin{tabular}{cccc}
@@ -270,69 +270,65 @@ $s(T)$	&	$10^{-2}$			&	$c_v(T)$	&	$3 \times 10^{-2}$ ($T > 1/4$)		\\
 \end{tabular}
 \end{center}
 
-Apart from a negligibly small region very close to $T=0$ all errors are reasonably limited. The specific heat is particularly affected by this problem as below $T \approx 1/4$ the relative error becomes as large as $1$.
-
 \begin{multicols}{2}
 	\pict{free16}{Computed and exact free energy of the $16 \times 16$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
 
-	\pict{free16_errlog}{Base 10 logarithm of the absolute value of the relative error on the free energy, with respect to the exact solution.}
-\end{multicols}
+	\pict{free16_errlog}{Base 10 logarithm of $\varepsilon[f(T)]$ for $L=16$.}
 
-\begin{multicols}{2}
 	\pict{internal16}{Computed and exact internal energy of the $16 \times 16$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{internal16_errlog}{Base 10 logarithm of the absolute value of the relative error on the internal energy, with respect to the exact solution.}
+	\pict{internal16_errlog}{Base 10 logarithm of $\varepsilon[u(T)]$ for $L=16$.}
 \end{multicols}
 
+Apart from a negligibly small region very close to $T=0$ all errors are reasonably limited. This in not however true for the specific heat, as below $T \approx 1/4$ the relative error becomes as large as $1$.
+
+\newpage
 \begin{multicols}{2}
 	\pict{entropy16}{Computed and exact entropy of the $16 \times 16$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{entropy16_errlog}{Base 10 logarithm of the absolute value of the relative error on the entropy, with respect to the exact solution.}
-\end{multicols}
+	\pict{entropy16_errlog}{Base 10 logarithm of $\varepsilon[s(T)]$ for $L=16$.}
 
-\begin{multicols}{2}
 	\pict{cv16}{Computed and exact specific heat of the $16 \times 16$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{cv16_errlog}{Base 10 logarithm of the absolute value of the relative error on the specific heat, with respect to the exact solution.}
+	\pict{cv16_errlog}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=16$.}
 \end{multicols}
 
-The overall results of this test resemble very closely those obtained by Wang, Tsai and Exler in their paper. The critical temperature (or, better, the maximum of the specific heat) for this case is found at $k_bT_c \approx 2.07$
+The overall results of this test resemble very closely those obtained by Wang, Tsai and Exler in their paper. The critical temperature (or, better, the maximum of the specific heat) for this case is found at $k_bT_c \approx 2.43$
 
-\subsection*{Other tests: increasing the system size}
+\subsection{Other tests: increasing the system size}
 
-Other tests were performed by increasing the system size from $L=16$ to $L={32,64,128,256}$. As mentioned above, the last two tests take a very long time to complete; as a matter of fact some of them are yet not complete at the time of writing (i.e. about 20 hours at this moment). For this reason only the cases $L=32$ and $L=64$ are presented below.
+Other tests were performed by increasing the system size from $L=16$ to all values $L=\{16,...,20,22,24,32,64,128,256\}$. As mentioned above, the last two tests take a very long time to complete; as a matter of fact some of them are yet not complete at the time of writing (i.e. about 20 hours at this moment). For this reason only the cases $L=32$ and $L=64$ are presented below.
 
 For all these tests the flatness threshold has been chosen to be $t=0.8$ while all the other parameters (except, of course, the seed given to the PRNG) are unchanged.
 
 
-\subsection*{Other tests results}
+\subsection{Other tests results}
 
-The average overall computation time for this two tests have been about $23~m$ and $7~h$  per simulation for $L=32$ and $L=64$, respectively. Again, all results were consistent.
+The average overall computation times have been about $23~m$ and $7~h$  per simulation for $L=32$ and $L=64$, respectively. Again, all results were consistent.
 
-Since the accuracy obtained with the previous test was already satisfying enough, we expect larger systems to yield even better results (at the cost of a much longer simulation time and memory used). We also expect the result to converge uniformly to the exact result for the infinite case, which is given in a paper by Wu, Li and Dai\cite{bib:exact2} (the final result only is presented in \appname \ref{app:exact_result}).
+Since the accuracy obtained with the previous test was already satisfying enough, we expect larger systems to yield even better results (at the cost of a much longer simulation time and memory used). We also expect the result to converge uniformly to the exact result for the infinite case, which is given in a paper by Wu, Li and Dai\cite{bib:exact2} (the final result only is presented in \appname \ref{app:exact_infinite}).
 
 As was done for the previous case, the maximum (absolute values of) the relative errors are given in \tabname \ref{tab:errors32} for $L=32$ and in \tabname \ref{tab:errors64} for $L=64$.
 
-\captionof{table}{Approximate values of the maximum absolute value of the relative errors for $L=32$}
+\captionof{table}{Approximate values of $\varepsilon[F(T)]$ for $L=32$}
 \begin{center}
 \label{tab:errors32}
 \begin{tabular}{cccc}
 \toprule
-$F(T)$	&	$\varepsilon[F(T)]$	&	$F(T)$		&	$\varepsilon[F(T)]$				\\
+$F(T)$	&	$\varepsilon[F(T)]$	&	$F(T)$		&	$\varepsilon[F(T)]$					\\
 \midrule
-$f(T)$	&	$3 \times 10^{-4}$	&	$u(T)$		&	$3 \times 10^{-3}$						\\
-$s(T)$	&	$10^{-2}$			&	$c_v(T)$	&	$3 \times 10^{-2}$ ($T > 1/4$)		\\
+$f(T)$	&	$10^{-4}$			&	$u(T)$		&	$10^{-3}$							\\
+$s(T)$	&	$10^{-2}$			&	$c_v(T)$	&	$1.6 \times 10^{-2}$ ($T > 1/4$)	\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\captionof{table}{Approximate values of the maximum absolute value of the relative errors for $L=64$}
+\captionof{table}{Approximate values of $\varepsilon[F(T)]$ for $L=32$}
 \begin{center}
 \label{tab:errors64}
-\caption{Approximate values of the maximum absolute value of the relative errors for $L=64$}
 \begin{tabular}{cccc}
 \toprule
-$F(T)$	&	$\varepsilon[F(T)]$	&	$F(T)$		&	$\varepsilon[F(T)]$				\\
+$F(T)$	&	$\varepsilon[F(T)]$		&	$F(T)$		&	$\varepsilon[F(T)]$				\\
 \midrule
-$f(T)$	&	$3 \times 10^{-4}$	&	$u(T)$		&	$3 \times 10^{-3}$						\\
-$s(T)$	&	$10^{-2}$			&	$c_v(T)$	&	$3 \times 10^{-2}$ ($T > 1/4$)		\\
+$f(T)$	&	$1.5 \times 10^{-5}$	&	$u(T)$		&	$10^{-3}$						\\
+$s(T)$	&	$1.5 \times 10^{-2}$	&	$c_v(T)$	&	$3 \times 10^{-2}$ ($T > 1/4$)		\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -342,65 +338,66 @@ The overall results are shown from \figname \ref{fig:free32} to \figname \ref{fi
 \begin{multicols}{2}
 	\pict{free32}{Computed and exact free energy of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
 
-	\pict{free32_errlog}{Base 10 logarithm of the absolute value of the relative error on the free energy, with respect to the exact solution.}
+	\pict{free32_errlog}{Base 10 logarithm of $\varepsilon[f(T)]$ for $L=32$.}
+
+	\pict{internal32}{Computed and exact internal energy of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
+	\pict{internal32_errlog}{Base 10 logarithm of $\varepsilon[u(T)]$ for $L=32$.}
 \end{multicols}
 
-\begin{multicols}{2}
-	\pict{internal32}{Computed and exact internal energy of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{internal32_errlog}{Base 10 logarithm of the absolute value of the relative error on the internal energy, with respect to the exact solution.}
-\end{multicols}
+We can again see that no difference between the computed and the exact results can be appreciated by eye sight. The relative errors are very similar to those that had been found in the case $L=16$ (about an order of magnitude smaller, in the best case). The peak of the specific heat has however become noticeably sharper and it has moved backward to a lower temperature.
 
 \begin{multicols}{2}
 	\pict{entropy32}{Computed and exact entropy of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{entropy32_errlog}{Base 10 logarithm of the absolute value of the relative error on the entropy, with respect to the exact solution.}
+	\pict{entropy32_errlog}{Base 10 logarithm of $\varepsilon[s(T)]$ for $L=32$.}
+
+	\pict{cv32}{Computed and exact specific heat of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
+	\pict{cv32_errlog}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=32$.}
 \end{multicols}
+
+
+The case $L=64$, as was mentioned above, presented some difficulties due to the very high value that the density of states can reach. The average simulation time has been found to be $\approx 7~h$. The analysis of acquired data also required a very long time, as did the computation of the exact solution in the whole interval $T\in[0,8]$. 
 
 \begin{multicols}{2}
-	\pict{cv32}{Computed and exact specific heat of the $32 \times 32$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-	\pict{cv32_errlog}{Base 10 logarithm of the absolute value of the relative error on the specific heat, with respect to the exact solution.}
+	\pict{free64}{Computed and exact free energy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
+
+	\pict{internal64}{Computed and exact internal energy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
 \end{multicols}
 
 
+The relative errors are still decreasing at a very slow rate (again, about 1 order of magnitude smaller than the case $L=32$). This leads to the conclusion that the improvement in accuracy does not compensate the increase in the computation time in a favourable manner and that it is not convenient to study too large systems if extreme accuracy is not required.
 
+\begin{multicols}{2}
+	\pict{free64_errlog}{Base 10 logarithm of $\varepsilon[f(T)]$ for $L=64$.}
+	
+	\pict{internal64_errlog}{Base 10 logarithm of $\varepsilon[u(T)]$ for $L=64$.}
+\end{multicols}
 
+The peak in the specific heat has however become sharper still and is slowly approaching the real critical value which is displayed in the exact infinite-size solution\cite{bib:exact2} (see \appname \ref{app:exact_infinite}).
 
+\begin{multicols}{2}
+	\pict{entropy64}{Computed and exact entropy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
+	
+	\pict{entropy64_errlog}{Base 10 logarithm of $\varepsilon[s(T)]$ for $L=64$.}
 
+	\pict{cv64}{Computed and exact specific heat of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
+	
+	\pict{cv64}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=64$.}
+\end{multicols}
 
+From \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the peak in the specific heat at the ``critical temperature'' becomes sharper and sharper as the size of the system increases, as expected. The value of the critical temperature (or, again, the maximum of the specific heat) is found to be $k_bT_c \approx 2.34$ for $L=32$ and $k_bT_c \approx 2.28$ for $L=64$.
 
+\section{Discussion}
 
-
-
-
-
-%\begin{multicols}{2}
-%	\pict{free64}{Computed and exact free energy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-%
-%	\pict{free64_errlog}{Base 10 logarithm of the absolute value of the relative error on the free energy, with respect to the exact solution.}
-%\end{multicols}
-%
-%\begin{multicols}{2}
-%	\pict{internal64}{Computed and exact internal energy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-%	\pict{internal64_errlog}{Base 10 logarithm of the absolute value of the relative error on the internal energy, with respect to the exact solution.}
-%\end{multicols}
-%
-%\begin{multicols}{2}
-%	\pict{entropy64}{Computed and exact entropy of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-%	\pict{entropy64_errlog}{Base 10 logarithm of the absolute value of the relative error on the entropy, with respect to the exact solution.}
-%\end{multicols}
-%
-%\begin{multicols}{2}
-%	\pict{cv64}{Computed and exact specific heat of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
-%	\pict{cv64_errlog}{Base 10 logarithm of the absolute value of the relative error on the specific heat, with respect to the exact solution.}
-%\end{multicols}
-
-From \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the peak in the specific heat at the ``critical temperature'' becomes sharper and sharper as the size of the system increases, as expected. The value of the critical temperature (or, again, the maximum of the specific heat) is found to be $k_bT_c \approx 2.29$ for $L=32$ and $k_bT_c \approx $ for $L=64$.
-
-\section*{Discussion}
+The overall results of all simulations show that the Wang-Landau method is indeed a good approach to the study of the 2D Ising model. The temperature at which the maximum value of the specific heat occurs is a monotonic decreasing function of the system size as can see from \figname \ref{fig:critical} and $C = \max_t[c_v(T)]$ obeys the relation
+\[
+	c_v(T_c) \approx c_v^{(0)}(T_c)\log(L)
+\]
+as can be seen from \figname \ref{fig:spec_heat}.
 
 \appendix
 
-\section{Exact result}
-\label{app:exact_result}
+\section{Exact result: finite case}
+\label{app:exact_finite}
 
 The exact result for the partition function of a finite-size 2D $n \times m$ Ising model wrapped on a torus (i.e. with periodic boundary conditions) is given by Ferdinand and Fisher in terms of the following quantities
 \[
@@ -439,6 +436,9 @@ The partition function is then
 \mathcal Z(T,n) = \frac{1}{2}\left(2\sinh{\left(\frac{2J}{k_bT}\right)}\right)^{nm/2}
 					\sum_{i=1}^4 Z_i(T,n)
 \]
+
+\section{Exact result: infinite case}
+\label{app:exact_infinite}
 
 The exact result for an infinite 2D Ising model is easier to obtain (even tough the computation of the partition function requires a numerical integration). The exact 2D Ising model for the infinite case was solved by Lars Onsager in 1944 and his result is given in a paper by Wu, Li and Dai\cite{bib:exact2}. We present here only the final result:
 \[

@@ -127,6 +127,11 @@ void l_edge_length_handler() {
 
 		//	cout << "got 'edge-length' option." << endl;
 
+	if (x <= 1) {
+		cout << endl << "EE: value is too low!" << endl;
+		exit(1);
+	}
+
 	if (std::pow(x, DIMENSIONALITY) > MAX_SITES) {
 		cout << endl << "EE: value is too large!" << endl;
 		cout << "NOTE: this implementation supports at most " << MAX_SITES << " sites."  << endl;
