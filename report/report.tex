@@ -92,9 +92,7 @@ The aim of this work is to reproduce the results of Wang, Tsai and Exler \cite{b
 Wang-Landau sampling, Ising2D, Monte Carlo, Computed Density of States
 \end{keywords}
 
-\section{Introduction}
-
-\subsection{The algorithm}
+\section{Introduction: Wang-Landau sampling}
 
 The Wang-Landau sampling is a method of the Monte Carlo class (and of the Metropolis subclass) which takes a completely different approach with respect to the traditional Monte Carlo algorithm; it does not focus on the achievement of an equilibrium distribution by means of energy minimization nor does it focus on the immediate building of a probability distribution of the states of a system.
 Instead, it focuses on an equal exploration of all possible energies of a given system model and builds the corresponding Density of States in energy $g(\epsilon)$ during the process.
@@ -127,10 +125,12 @@ The algorithm for Wang-Landau sampling is clearly and comprehensively described 
 
 The source code can be compiled using the {\bf cmake} utility but it is recommended to compile it using the provided bash script \verb|build.sh| in order to avoid working directory pollution.
 Some compile-time configuring options, such as the dimensionality of the system and the pseudo-random number generator (PRNG) to be used, can be modified in the file \verb|CMakeLists.txt| prior to the execution of the utility.
-The script will output the executable (named \verb|wl|) which can then be run.
+The script will output the executable (named \verb|wl|) which can then be fed with the command-line options described in \tabname \ref{tab:options}.\footnote{One can also see the manpage by running \verb|man ./wl.1| from the source root directory.}
 
-The program accepts the following options:\footnote{One can also see the manpage by running \verb|man ./wl.1| from the source root directory.}
-\begin{center}\begin{tabular}{cllcc}
+\captionof{table}{Command-line arguments accepted by the program}
+\begin{center}
+\label{tab:options}
+\begin{tabular}{cllcc}
 \toprule
 Option	&	Long form				&	Meaning							& Data type			& Default		\\
 \midrule
@@ -141,7 +141,8 @@ f 		&	flatness-treshold		&	Histogram flatness threshold	& double 			& $0.9$			\\
 l 		&	edge-length				&	Length of a square edge			& unsigned int		& $16$			\\
 r 		&	seed					&	PRNG initial seed				& unsigned long		& $0$\footnote{If $0$ is fed to this option, the program will choose the default built-in seed of the PRNG}			\\
 \bottomrule
-\end{tabular}\end{center}
+\end{tabular}
+\end{center}
 
 All the tests for this work were performed on a MacBookPro9,1\footnote{The specifics are: 
 Intel Core i7 (2.3Ghz, 4 cores); L2Cache (256KB per core); L3Cache (6MB); RAM (8GB); OSX 10.10.4 (14E46); Kernel(Darwin 14.4.0);} on a single core per simulation. Multiple cores have been used to run different simulations in a parallel and independent environment. The code was compiled using \verb|clang|. The output of \verb|clang --version| is: \begin{verbatim}
@@ -159,18 +160,23 @@ The program outputs three ``.txt'' files:
 \begin{itemize}
 	\item[-] \verb|input.txt|: contains all information fed to the program along with some other initialization value such as the the seed used by the PRNG. This file is useful both for reproducibility and for parsing by analysis software such as Wolfram Mathematica.
 	\item[-] \verb|log.txt|: contains diagnostic information such as the total number of Monte Carlo steps that were performed and the acceptance ratio of the simulation.
-	\item[-] \verb|dos_formatted.txt|: contains the actual result of the simulation in as a formatted array of values. The file is organized as follows:\\
-	\begin{center}\begin{tabular}{cl}
-	\toprule
+	\item[-] \verb|dos_formatted.txt|: contains the actual result of the simulation in as a formatted array of values. The file is organized as described in \tabname \ref{tab:output_file}\\
+\end{itemize}
+
+\captionof{table}{Output format of the program}
+\begin{center}
+\label{tab:output_file}
+\begin{tabular}{cl}
+\toprule
 	Column				&	Description												\\
-	\midrule
+\midrule
 	$i$					&	Simple C-style array index.								\\
 	$\epsilon$			&	Energy value of the corresponding histogram channel.	\\
 	$g(\epsilon)$		&	Density of states at the corresponding energy.			\\
 	$log(g(\epsilon))$	&	Natural logarithm of $g(\epsilon)$.						\\
-	\bottomrule
-	\end{tabular}\end{center}
-\end{itemize}
+\bottomrule
+\end{tabular}
+\end{center}
 
 \subsection{Data analysis}
 
@@ -178,8 +184,7 @@ A bash script (named \verb|collect.sh|) is provided along with the source code i
 
 Since the 2D Ising model is exactly solvable, the exact results (see \cite{bib:exact}) were here used in order to compute the actual relative errors on the dataset.
 
-The analysis of the results has been delegated to another software, Wolfram Mathematica being an obvious candidate. The notebook that was used for this analysis is provided along with the source code and the collection script.
-The notebook provides simple functions to load the generated data and compare it with the exact result.
+The analysis of the results has been delegated to another software, Wolfram Mathematica being an obvious candidate. The notebook that was used for this analysis (provided along with the source code and the collection script) provides simple functions to load the generated data and compare it with the exact result.
 
 The relative errors with respect to the exact solution are calculated for any function $F(T)$ as
 \[
@@ -193,15 +198,12 @@ The relative errors with respect to the exact solution are calculated for any fu
 
 The source code \footnote{The source code is available and freely downloadable on the GitHub platform at the following address: \url{https://github.com/gianlucasalvato/wanglandau.git}} robbed a library (of my own writing) of some useful concepts and programming patterns and is organized as follows:
 \begin{itemize}
-	\item[-] The \verb|System| template class accepts one dummy class template argument and is meant to represent the basic, state-independent properties of the system under consideration, such as the dimensionality and the underlying structure of the lattice representation. The template argument represents a name for the system under consideration.\footnote{Such objects are commonly referred to as ``tags'' as they provide no data and no instance functions and are actually compiled out of the program at an early stage; they are only used to name a specific template specialization.}
-	The namespace \verb|names::System| is the place in which all the relevant tags should be placed.
-	\item[-] The \verb|State| template class accepts a \verb|System| class and a \verb|tag| class as template arguments (again, only a dummy class for name resolution).
-	It is meant to provide those properties of the system which are not intrinsic properties of the model but rather depend on the current state of the system itself.
-	This includes a \verb|dof| (degrees of freedom) variable along with an \verb|energy()| function and some utility functions which act on on (or extract information from) the \verb|dof|s.
-	\item[-] The \verb|Algorithm| template class accepts a \verb|System| class and a {\verb Strategy } tag as template arguments and instantiates the appropriate \verb|State| object for subsequent manipulation.
-	This class is meant to provide all functions and properties which are not intrinsic either to the system itself or to its state but are only relevant to the implementation of the integration mechanics.
+	\item[-] The \verb|System| template class accepts one class template argument and is meant to represent the basic, state-independent properties of the system under consideration, such as the dimensionality and the underlying structure of the lattice representation. The template argument is just a name for the system under consideration.\footnote{Such objects are commonly referred to as ``tags'' as they provide no data and no instance functions and are actually compiled out of the program at an early stage; they are only used to name a specific template specialization.}
+	The namespace \verb|names::System| is the place in which all system names should be placed.\footnote{It's worth noting that some properties (such as the dimensionality of the system, the maximum number of allowed spin sites and the pseudo-random number generator [PRNG]) are hard-coded in the program but can be easily modified by changing the corresponding definitions in the ``CMakeLists.txt'' file before compiling with the {\bf cmake } utility or via the bash script ``build.sh''. This choice was made thinking that the advantages of being able to compute many dimensional-dependent quantities at compile time greatly overcome the disadvantage of having to rebuild the software from source; moreover, one can easily build one executable for each needed dimensionality, which not often does anyway exceed 3.}
+	\item[-] The \verb|State| template class accepts a \verb|System| class and a \verb|tag| as template arguments. This class provides all those properties of the system which are not intrinsic of the model but rather depend on the current state of the system; this includes a \verb|dof| (degrees of freedom) variable along with an \verb|energy()| function and some utility functions which act on on (or extract information from) the \verb|dof|s.
+	\item[-] The \verb|Algorithm| template class accepts a \verb|System| class and a {\verb Strategy } tag as template arguments and instantiates the appropriate \verb|State| object for subsequent manipulation. This class provides all functions and properties which are not intrinsic either to the system or to its state but are only relevant to the implementation of the integration mechanics.
 	The {\verb Parameters } nested type contains all the simulation parameters that are used by the algorithm during execution. The namespace \verb|names::Algorithm| is the container for all algorithm names.
-	\item[-] Other utility classes such as \verb|HypercubicGrid| included in the \verb|utils| namespace are meant to provide the representation of some underlying structure of the system under consideration.\footnote{It's worth noting that some properties (such as the dimensionality of the system, the maximum number of allowed spin sites and the pseudo-random number generator [PRNG]) are hard-coded in the program but can be easily modified by changing the corresponding definitions in the ``CMakeLists.txt'' file before compiling with the {\bf cmake } utility or via the bash script ``build.sh''. This choice was made thinking that the advantages of being able to compute many dimensional-dependent quantities at compile time greatly overcome the disadvantage of having to rebuild the software from source; moreover, one can easily build one executable for each needed dimensionality, which not often does anyway exceed 3.}
+	\item[-] Other utility classes such as \verb|HypercubicGrid| included in the \verb|utils| namespace provide the representation of some underlying structure used in code.
 	\item[-] The ``\verb|options.h|'' source file only contains the code that is needed to parse command line arguments, in short or long format, and to perform some safety checks on the given values.
 \end{itemize}
 
@@ -209,9 +211,9 @@ The source code follows the {\bf tag dispatching pattern} in order to concretize
 
 \subsection{Implementation}
 
-The two tags {\verb HypercubicIsing } and {\verb NearestNeighboursInteraction } are fed to the {\verb System } and {\verb State } templates respectively and the resulting {\verb System } class is fed to the {\verb Algorithm } template class in order to construct the full object.
+The two tags {\verb HypercubicIsing } and {\verb NearestNeighboursInteraction } are fed to the {\verb System } and {\verb State } templates respectively and the resulting {\verb System } class is given as a template parameter to the {\verb Algorithm } in order to construct the full object.
 
-The details of the algorithm can be found in the paper by Landau, Tsai and Exler \cite{bib:wang_landau} as only those implementation-dependent parts are explained below in order for the reader to understand how to use the code. All the relevant parts of the algorithm are coded in the \verb|move()| instance function of the \verb|Algorithm| class.
+The details of the algorithm can be found in the paper by Landau, Tsai and Exler \cite{bib:wang_landau}. All the relevant parts of said algorithm are coded in the \verb|move()| instance function of the \verb|Algorithm| class.
 
 As a first step it is strongly advised to define aliases to the template specializations that will be used and a logging macro (named {\verb mesg }). The terms {\verb System }, {\verb State } and {\verb Algorithm } will here be used to address such specializations.
 
@@ -221,7 +223,7 @@ Nothing more is actually needed and the user can begin the evolution straight aw
 
 \section{Tests}
 
-After carefully testing each component of the program a very specific set of tests has been chosen. The only differences between any two tests are the size of the system $N=L^2$ (where $L$ is the length of a single edge of the square simulation box) and the flatness threshold $t$ for the histogram of visited energies.
+A very specific set of tests has been chosen. The only differences between any two tests are the size of the system $N=L^2$ (where $L$ is the length of a single edge of the square simulation box) and the flatness threshold\footnote{The flatness threshold is a fractional value in the interval $]0,1[$ and represents the fraction of the {\em average} value $\tilde h$ of the histogram (which we know {\em a priori} to be equal to the number of performed steps divided by the number of channels in the histogram) such that if {\bf any} histogram channel $i$ yields a value $h[i] < \tilde h$ the histogram is considered NOT flat.} $t$ for the histogram of visited energies.
 
 The following properties are common to all tests:
 \begin{itemize}
@@ -232,12 +234,11 @@ The following properties are common to all tests:
 	\item[-] number of MonteCarlo steps\footnote{Note the fact that {\em each} Monte Carlo {\bf step} consist of $N$ {\em moves}, where $N=L^2$ is the total number of sites in the square lattice.} per sweep $\tau = 10^4$.
 \end{itemize}
 
-The flatness threshold\footnote{The flatness threshold is a fractional value in the interval $]0,1[$ and represents the fraction of the {\em average} value $\tilde h$ of the histogram (which we know {\em a priori} to be equal to the number of performed steps divided by the number of channels in the histogram) such that if {\bf any} histogram channel $i$ yields a value $h[i] < \tilde h$ the histogram is considered NOT flat.}
-for the histogram of visited energies has been carefully tuned for each simulation: for small sizes of the system ($L=\{2,...,16\}$) the values $t=0.8$, $t=0.9$, $t=0.95$ has been tested to yield little differences in both the simulation time and the accuracy of the computed DoS.
+The flatness threshold has been carefully tuned for each simulation: for ($L=\{2,...,16\}$) the values $t=0.8$, $t=0.9$, $t=0.95$ has been tested to yield little differences in both the simulation time and the accuracy of the computed DoS.
 
-For bigger systems (such as $L=32$ and $L=64$) the value $t=0.8$ has been chosen as higher values would considerably increase the simulation time without noticeably improve the accuracy of the final results. The case $L=64$ presented some problems as the normalized density of states can quickly overflow the capacity of a \verb|double| variable; we have in fact $\max_\epsilon log(g(0)) \approx 2835$ so that $g(0) \approx e^{2835} \approx 10^{1231}$ is clearly not representable as a single or double precision standard floating point value.
+For bigger systems (such as $L=\{32,64\}$) the value $t=0.8$ has been chosen as higher values would considerably increase the simulation time without noticeably improve the accuracy of the final results. The case $L=64$ presented some problems as the normalized density of states quickly overflows the capacity of a \verb|double| variable; in fact $log(g(0)) \approx 2835$ so that $g(0) \approx e^{2835} \approx 10^{1231}$ is not representable as a single or double precision standard floating point value.
 
-For this reason, all simulations were run with a quadruple precision \verb|long double| data type instead, which should be able to store the value. On my machine each \verb|long double| takes $16$ bytes of memory space. Furthermore, it is possible to always work with the logarithm of the Density of States in order to avoid overflows (at the cost of losing some precision). This strategy has been chosen for $L=64$.
+It is possible however to always work with the logarithm of the Density of States in order to avoid overflows (at the cost of losing some precision). This strategy has been chosen for $L=64$.
 
 For bigger systems still the value has been kept at $t=0.8$ but the simulation time results exceedingly increased. Since at the time of writing I'm still waiting for the cases $L=128$ and $L=256$ to terminate their parallel execution\footnote{This is not surprising since we can expect the simulation time to grow {\em at least} as $L^2$.}, I cannot speak about the properties of those systems.
 
@@ -379,7 +380,7 @@ The peak in the specific heat has however become sharper still and is slowly app
 
 	\pict{cv64}{Computed and exact specific heat of the $64 \times 64$ Ising system with nearest neighbours interaction and periodic boundary conditions. The two curves cannot be distinguished by eye sight.}
 	
-	\pict{cv64}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=64$.}
+	\pict{cv64_errlog}{Base 10 logarithm of $\varepsilon[c_v(T)]$ for $L=64$.}
 \end{multicols}
 
 From \figname \ref{fig:cv16}, \figname \ref{fig:cv32} and \figname \ref{fig:cv64} we can see that the peak in the specific heat at the ``critical temperature'' becomes sharper and sharper as the size of the system increases, as expected. The value of the critical temperature (or, again, the maximum of the specific heat) is found to be $k_bT_c \approx 2.294 \pm 0.001$ for $L=32$ and $k_bT_c \approx 2.283 \pm 0.001$ for $L=64$.
