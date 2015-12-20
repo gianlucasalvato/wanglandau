@@ -2,7 +2,7 @@
 This is a C++11 implementation of the Wang-Landau algorithm applied to a NxN Ising system wrapped on a torus with nearest neighbours interactions.
 
 ## Abstract
-The aim of this work is to reproduce the results of Wang, Tsai and Exler [1] by using the Wang-Landau algorithm on a 2D n × n lattice with periodic boundary conditions and nearest neighbour interactions. The Wang-Landau approach allows one to obtain in an (almost really) easy way the DoS (Density of States) of a wide class of systems, thus providing the ability to compute many thermodynamic quantities at any temperature.
+The aim of this work is to reproduce the results of Wang, Tsai and Exler [1] by using the Wang-Landau algorithm on a 2D n × n lattice with periodic boundary conditions and nearest neighbour interactions. The Wang-Landau approach provides us with a convenient way to obtain the Density of States for a wide range of systems, thus providing the ability to compute many thermodynamic quantities at any temperature.
 
 ## Contents
 
