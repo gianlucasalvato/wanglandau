@@ -49,6 +49,7 @@
 		99CD21831B68636900B50A8E /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
 		99CD21851B68689D00B50A8E /* wlConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wlConfig.h; sourceTree = "<group>"; };
 		99CD21861B6A3D6000B50A8E /* HypercubicIsingState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HypercubicIsingState.h; path = include/State/HypercubicIsingState.h; sourceTree = "<group>"; };
+		99F8CD821B728EF5006B0E5F /* HypercubicQPottsSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HypercubicQPottsSystem.h; path = ../../NPgTl/include/System/HypercubicQPottsSystem.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				99AD26E01B5BD9AA00C5752B /* HypercubicIsingSystem.h */,
+				99F8CD821B728EF5006B0E5F /* HypercubicQPottsSystem.h */,
 			);
 			name = System;
 			sourceTree = "<group>";
@@ -335,6 +337,11 @@
 				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = YES;
 				GCC_FAST_MATH = NO;
 				GCC_UNROLL_LOOPS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				LLVM_LTO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -347,6 +354,11 @@
 				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_UNROLL_LOOPS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				LLVM_LTO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

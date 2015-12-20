@@ -3,7 +3,7 @@
 EXEC_NAME="wl"
 BUILD_DIR="./build"
 
-[[ ! -d "$BUILD_DIR" ]] && mkdir -p build;
+[[ ! -d "$BUILD_DIR" ]] && mkdir -p "$BUILD_DIR";
 
 cd "$BUILD_DIR"
 

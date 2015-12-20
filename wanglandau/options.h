@@ -185,7 +185,7 @@ void cgoParse(int argc, char * const argv[]) {
 			case 's': _flag f_shrink_factor			= true;	sscanf(optarg, "%lf",	_argument f_shrink);			f_shrink_factor_handler();			break;
 			case 't': _flag t_mod_factor_threshold	= true;	sscanf(optarg, "%lf",	_argument f_threshold);			t_mod_factor_threshold_handler();	break;
 			case 'l': _flag l_edge_length			= true;	sscanf(optarg, "%u",	_argument edge);				l_edge_length_handler();			break;
-			case 'f': _flag s_flatness_threshold		= true;	sscanf(optarg, "%lf",	_argument flatness_threshold);	s_flatness_threshold_handler();		break;
+			case 'f': _flag s_flatness_threshold	= true;	sscanf(optarg, "%lf",	_argument flatness_threshold);	s_flatness_threshold_handler();		break;
 			case 'r': _flag r_seed					= true;	sscanf(optarg, "%llu",	_argument seed);				r_seed_handler();					break;
 
 			case ':':	cout << argv[0] << ": option '-" << optopt << "' requires an argument\n" << endl;
