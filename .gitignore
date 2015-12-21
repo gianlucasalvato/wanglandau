@@ -1,5 +1,10 @@
+.DS_Store
+bin/
+build/
+doc/config.h
+include/config.h
 papers/
-test_HypercubicGrid/
-wanglandau/build/
-wanglandau/wl
-wanglandau.xcodeproj/
+work/
+tests/
+work/
+xcode/

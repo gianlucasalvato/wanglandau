@@ -11,4 +11,4 @@ f_threshold_log: 1e-08
 flatness_threshold: 0.8
 
 prng: std::mt19937_64
-prng_seed: 484264656
+prng_seed: 3387826721

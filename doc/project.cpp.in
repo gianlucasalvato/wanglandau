@@ -1,0 +1,18 @@
+//
+//  @PROJECT_NAME@.cpp
+//  @PROJECT_NAME@
+//
+//  Created by @AUTHOR_NAME@ on @COMPILE_TIME@.
+//  Copyright © 2015 @AUTHOR_NAME@. All rights reserved.
+//
+
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+int main(int argc, char *argv[]) {
+
+	return 0;
+
+}
