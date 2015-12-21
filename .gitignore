@@ -6,6 +6,6 @@ include/config.h
 papers
 work
 tests
-work
+work/*
 !work/Analysis.nb
 xcode
