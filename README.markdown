@@ -28,6 +28,8 @@ I only wish to stress that almost all the code of this program was taken out fro
 
 I _weakly_ recommend to simply launch the script "build.sh" from within its enclosing folder. Obviously, anyone is free to choose is own toolchain and its only real purpose is to "cd" to the "build" directory, build all sources there and only moving the final executable in the original working directory, thus keeping the original project clean and organized.
 
+Some important configuration (like the dimensionality of the simulation box and the pseudo-random number generator to be used) can be modified from within 'CMakeLists.txt' along with many other build options. The same applies for the choice of the compiler and the optimization level to use.
+
 The build script will **NOT** install any file in any location outside the current working directory. I feel like no one will ever really need nor want to have a program like this amongst his system binaries and its much better that it stays where it belongs: next to the source code, the data directory, the documentation and all of the other relevant information.
 
 All this information and more is available in the written report.
