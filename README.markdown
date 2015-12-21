@@ -32,5 +32,5 @@ The build script will **NOT** install any file in any location outside the curre
 
 All this information and more is available in the written report.
 
-### Any constructive criticism or suggestion for improvement will be greatly appreciated!
+### Any constructive criticism or suggestion potentially leading to improvement of this software will be greatly appreciated!
 You can send some to gian.salvato@gmail.com or through my new [GitHub account](https://github.com/gianlucasalvato) if you wish!
