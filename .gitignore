@@ -1,10 +1,10 @@
 .DS_Store
-bin/
-build/
+bin
+build
 doc/config.h
 include/config.h
-papers/
-work/
-tests/
-work/
-xcode/
+papers
+work
+tests
+work
+xcode
