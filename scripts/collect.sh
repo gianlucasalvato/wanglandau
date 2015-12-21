@@ -3,6 +3,11 @@
 CMD="`pwd`/bin/wl"
 workdir="`pwd`/work"
 
+if [ ! -f $CMD ]; then
+	echo "Cannot find executable. This script must run in the project root directory!"
+	exit 0
+fi
+
 [ "$1" == "--dry" ] && DRY=1
 
 runs=1
@@ -12,7 +17,7 @@ sleep_time=20
 if [ ! -f "$CMD" ]; then
 	./build.sh
 	EXIT_CODE=$?
-	[[ "$EXIT_CODE" -ne 0 ]] && echo "Could not start program!" && exit $EXIT_CODE
+	[[ "$EXIT_CODE" -ne 0 ]] && echo "Could not build program!" && exit $EXIT_CODE
 fi
 
 edges=( 8 )
