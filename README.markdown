@@ -26,7 +26,7 @@ I only wish to stress that almost all the code of this program was taken out fro
 
 ## Build and install
 
-I _weakly_ recommend to simply launch the script "build.sh" from within its enclosing folder. Obviously, anyone is free to choose is own toolchain and its only real purpose is to "cd" to the "build" directory, build all sources there and only moving the final executable in the original working directory, thus keeping the original project clean and organized.
+I _weakly_ recommend to simply launch the script "build.sh" from within its enclosing folder. Obviously, anyone is free to choose is own toolchain and its only real purpose is to _cd_ to the "build" directory and launch cmake from there, thus keeping the original project clean and organized.
 
 Some important configuration options (like the dimensionality of the simulation box and the pseudo-random number generator to be used) can be modified from within 'CMakeLists.txt' along with many other build options. The same applies for the choice of the compiler and the optimization level to use.
 
