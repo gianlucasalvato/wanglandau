@@ -22,7 +22,7 @@ This repository is organized as follows:
 
 ## Coding style
 
-I only wish to stress that almost all the code of this program was taken out from a generic simulation library of my own writing (way to young to have its own repository but growing (not so) rapidly). This is the reason why the code may seem a bit cluttered and some otherwise unexplainable choices have been made when deciding its overall structure.
+I only wish to stress that almost all the code of this program was taken out from a generic simulation library of my own writing (way too young to have its own repository but growing (not so) rapidly). This is the reason why the code may seem a bit cluttered and some otherwise unexplainable choices have been made when deciding its overall structure.
 
 ## Build and install
 
